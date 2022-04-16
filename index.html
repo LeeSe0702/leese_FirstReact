@@ -16,6 +16,27 @@
         const root = document.querySelector("#root");
 
         function App() {
+            const [index, setIndex] = React.useState("xx");
+            const onSelect = (event) => {
+                setIndex(event.target.value);
+            };
+            return (
+                <div>
+                    <h1>슈우우우우퍼어어어어어어어 변환기</h1>
+                    <select value={index} onChange={onSelect}>
+                        <option value="xx">선택하기 </option>
+                        <option value="0">시 & 분</option>
+                        <option value="1">키로미터 & 마일</option>
+                    </select>
+                    <hr />
+                    {index === "xx" ? <h3>변환기를 선택하세요 :)</h3> : null}
+                    {index === "0" ? <MinutesToHour /> : null}
+                    {index === "1" ? <KmToMiles /> : null}
+                </div>
+            );
+        }
+
+        function MinutesToHour() {
             const [amount, setAmount] = React.useState(0);
             const [inverted, setinverted] = React.useState(false);
             const onChange = (event) => {
@@ -29,7 +50,6 @@
             };
             return (
                 <div>
-                    <h3>시간 변환</h3>
                     <div>
                         <lable htmlfor="hours">시 </lable>
                         <input value={inverted ? Math.round(amount / 60) : amount} id="hours" placeholder="Hours" type="number" disabled={inverted} onChange={onChange} />
@@ -43,7 +63,33 @@
                 </div>
             );
         }
+        function KmToMiles() {
+            const [amount, setAmount] = React.useState(0);
+            const [inverted, setinverted] = React.useState(false);
+            const onChange = (event) => {
+                setAmount(event.target.value);
+            };
 
+            const reset = () => setAmount(0);
+            const onInvert = () => {
+                reset();
+                setinverted((current) => !current);
+            };
+            return (
+                <div>
+                    <div>
+                        <lable htmlfor="km">키로미터 : </lable>
+                        <input value={inverted ? Math.round(amount * 1.609344) : amount} id="km" placeholder="KM" type="number" onChange={onChange} disabled={inverted} />
+                    </div>
+                    <div>
+                        <lable htmlfor="mile">마일 : </lable>
+                        <input value={inverted ? amount : Math.round(amount / 1.609344)} id="mile" placeholder="Miles" type="number" onChange={onChange} disabled={!inverted} />
+                    </div>
+                    <button onClick={reset}>초기화</button>
+                    <button onClick={onInvert}>{inverted ? "되돌아가기" : "전환"}</button>
+                </div>
+            );
+        }
         // JSX 사용하려면 첫글자는 대문자.. !
         ReactDOM.render(<App />, root); //만든걸 HTML에 랜덩링 업데이트
     </script>
